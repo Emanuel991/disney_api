@@ -3,7 +3,6 @@ package ar.edu.unju.fi.app.models;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,13 +27,7 @@ public class Film {
 	@JoinColumn(name = "gender")
 	private Gender gender;
 	
-	//@ManyToMany(mappedBy = "films")
-	//Set<Personaje> personajes;
-	
-	//@JsonManagedReference
-	@OneToMany(mappedBy = "film", 
-			cascade = CascadeType.ALL,
-	        orphanRemoval = true)
+	@OneToMany(mappedBy = "film")
     Set<CharacterFilm> charactersFilms;
 	
 	public Film() {

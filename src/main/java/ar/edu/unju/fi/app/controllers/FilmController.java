@@ -1,5 +1,6 @@
 package ar.edu.unju.fi.app.controllers;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unju.fi.app.dto.FilmDto;
 import ar.edu.unju.fi.app.dto.MovieDetailsDto;
+import ar.edu.unju.fi.app.dto.MovieModifiedDto;
 import ar.edu.unju.fi.app.models.Film;
 import ar.edu.unju.fi.app.services.FilmService;
 
@@ -48,11 +50,11 @@ public class FilmController {
 			List<Film> listName = filmService.findByGender(genre.get()); 
 			return listName.stream().map(this::convertToDetailsDto).collect(Collectors.toList());
 		}
-		if(!order.isEmpty() && order.get().equals("ASC")) {
+		if(!order.isEmpty() && order.get().equals("asc")) {
 			List<Film> listName = filmService.finnByOrder(); 
 			return listName.stream().map(this::convertToDetailsDto).collect(Collectors.toList());
 		}
-		if(!order.isEmpty() && order.get().equals("DESC")) {
+		if(!order.isEmpty() && order.get().equals("desc")) {
 			List<Film> listName = filmService.finnByOrderDesc(); 
 			return listName.stream().map(this::convertToDetailsDto).collect(Collectors.toList());
 		}
@@ -71,8 +73,9 @@ public class FilmController {
 	}
 	
 	@PutMapping("/movieModified")
-	public Film update(@RequestBody Film film) {
-		return filmService.save(film);
+	public FilmDto update(@RequestBody MovieModifiedDto film) {
+		film.setCreationDate(new Date());
+		return convertToDto(filmService.save(convertToModifiedEntity(film)));
 	}
 	
 	private FilmDto convertToDto(Film film) {
@@ -84,4 +87,15 @@ public class FilmController {
 		MovieDetailsDto filmDto = modelMapper.map(film, MovieDetailsDto.class);
 	    return filmDto;
 	}
+	
+	private Film convertToModifiedEntity(MovieModifiedDto movie) {
+		Film film = modelMapper.map(movie, Film.class);
+	    return film;
+	}
+	
+	/*
+	private MovieModifiedDto convertToModifiedDto(Film movie) {
+		MovieModifiedDto film = modelMapper.map(movie, MovieModifiedDto.class);
+	    return film;
+	} */
 }

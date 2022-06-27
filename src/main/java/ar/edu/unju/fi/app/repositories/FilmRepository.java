@@ -21,10 +21,10 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 	@Query("from Film f where f.gender.idGender = :gender")
 	public List<Film> findByGender(Integer gender);
 	
-	@Query("from Film f order by f.title ASC")
+	@Query("from Film f order by f.creationDate ASC")
 	public List<Film> findByOrder();
 	
-	@Query("from Film f order by f.title DESC")
+	@Query("from Film f order by f.creationDate DESC")
 	public List<Film> findByOrderDesc();
 	
 }
